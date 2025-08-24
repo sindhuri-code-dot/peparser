@@ -32,18 +32,16 @@ Features
 
     Compilation timestamp extraction
 
-    Cross-platform support
-
 Usage
 
 # Basic analysis
 pe-parser file.exe
 
-# Verbose output
-pe-parser -v file.exe
+# Windows
+pe-parser-windows.exe file.exe
+
+# Linux  
+./pe-parser-linux file.exe
 
 # Disable pefile fallback
 pe-parser --no-pefile file.exe
-
-# Show help
-pe-parser --help
