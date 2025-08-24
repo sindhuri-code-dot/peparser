@@ -1,0 +1,85 @@
+name: Build PE Parser
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        
+    - name: Build Windows executable
+      run: |
+        pyinstaller --onefile --name pe-parser-windows --console pe_parser.py
+        
+    - name: Upload Windows artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: pe-parser-windows
+        path: dist/pe-parser-windows.exe
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        pip install pyinstaller
+        
+    - name: Build Linux executable
+      run: |
+        pyinstaller --onefile --name pe-parser-linux --console pe_parser.py
+        
+    - name: Upload Linux artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: pe-parser-linux
+        path: dist/pe-parser-linux
+
+  create-release:
+    needs: [build-windows, build-linux]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+    - name: Download Windows artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: pe-parser-windows
+        path: dist
+        
+    - name: Download Linux artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: pe-parser-linux
+        path: dist
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist/pe-parser-windows.exe
+          dist/pe-parser-linux

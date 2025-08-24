@@ -1,0 +1,20 @@
+# Exclude ALL Python source files
+*.py
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Exclude build directories
+dist/
+build/
+
+# Exclude any temporary files
+*.tmp
+*.temp
+
+# Keep these files
+!.github/
+!README.md
+!LICENSE
+!scripts/
