@@ -45,3 +45,6 @@ pe-parser-windows.exe file.exe
 
 # Disable pefile fallback
 pe-parser --no-pefile file.exe
+
+Contributing Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
