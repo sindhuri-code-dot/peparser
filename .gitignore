@@ -13,6 +13,9 @@ build/
 *.tmp
 *.temp
 
+# Ignore the directory
+peparser/
+
 # Keep these files
 !.github/
 !README.md
